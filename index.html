@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Calculadora de precificação para peças impressas em 3D." />
+  <title>Calculadora de Precificação 3D</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div id="loginGate" class="login-gate">
+    <div class="login-card">
+      <span class="eyebrow">ACESSO RESTRITO</span>
+      <h1>Calculadora 3D</h1>
+      <p>Informe a senha para acessar a calculadora.</p>
+
+      <form id="loginForm" class="login-form">
+        <label class="field">
+          <span>Senha</span>
+          <div class="password-wrap">
+            <input
+              id="loginPassword"
+              type="password"
+              autocomplete="current-password"
+              placeholder="Digite sua senha"
+              required
+            />
+            <button id="togglePassword" type="button" class="password-toggle" aria-label="Mostrar senha">
+              Mostrar
+            </button>
+          </div>
+        </label>
+
+        <div id="loginError" class="login-error" hidden>Senha incorreta.</div>
+
+        <button type="submit" class="primary login-button">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <main id="appContent" class="container app-locked" aria-hidden="true">
+    <header class="hero hero-with-actions">
+      <div>
+        <span class="eyebrow">IMPRESSÃO 3D</span>
+        <h1>Calculadora de Precificação</h1>
+        <p>Preencha os dados da peça para calcular o custo real e um preço sugerido de venda.</p>
+      </div>
+      <button id="lockButton" type="button" class="lock-button">Bloquear</button>
+    </header>
+
+    <form id="pricingForm" class="card" novalidate>
+      <section>
+        <div class="section-title">
+          <span class="step">1</span>
+          <div>
+            <h2>Filamento</h2>
+            <p>Informe o preço do rolo. A quantidade usada será preenchida em cada parte.</p>
+          </div>
+        </div>
+
+        <div class="grid single">
+          <label class="field">
+            <span>Preço do filamento por kg</span>
+            <div class="input-prefix">
+              <span>R$</span>
+              <input id="filamentKgPrice" class="money-mask" type="text" inputmode="numeric"
+                     placeholder="Ex.: 85,00" autocomplete="off" required />
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <span class="step">2</span>
+          <div>
+            <h2>Tempo e energia</h2>
+            <p>Adicione todas as partes da impressão. O consumo médio da impressora está fixado em 200 W.</p>
+          </div>
+        </div>
+
+        <div id="partsContainer" class="parts-container"></div>
+
+        <div class="parts-actions">
+          <button id="addPartButton" type="button" class="add-part">+ Adicionar parte</button>
+        </div>
+
+        <div class="fixed-consumption">
+          <span>Consumo médio da impressora</span>
+          <strong>200 W</strong>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <span class="step">3</span>
+          <div>
+            <h2>Custos da máquina</h2>
+            <p>Os valores abaixo já estão preenchidos com seus custos padrão.</p>
+          </div>
+        </div>
+
+        <div class="grid three">
+          <label class="field">
+            <span>Manutenção por hora</span>
+            <div class="input-prefix">
+              <span>R$</span>
+              <input id="maintenancePerHour" class="money-mask" type="text" inputmode="numeric"
+                     value="0,30" autocomplete="off" />
+            </div>
+          </label>
+
+          <label class="field">
+            <span>Depreciação por hora</span>
+            <div class="input-prefix">
+              <span>R$</span>
+              <input id="depreciationPerHour" class="money-mask" type="text" inputmode="numeric"
+                     value="0,30" autocomplete="off" />
+            </div>
+          </label>
+
+          <label class="field">
+            <span>Energia elétrica</span>
+            <div class="input-suffix">
+              <div class="input-prefix nested">
+                <span>R$</span>
+                <input id="energyPerKwh" class="money-mask" type="text" inputmode="numeric"
+                       value="1,00" autocomplete="off" />
+              </div>
+              <span>/ kWh</span>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <span class="step">4</span>
+          <div>
+            <h2>Venda</h2>
+            <p>Informe embalagem, frete, custos extras, lucro desejado, taxas e impostos.</p>
+          </div>
+        </div>
+
+        <div class="grid">
+          <label class="field">
+            <span>Embalagem</span>
+            <div class="input-prefix">
+              <span>R$</span>
+              <input id="packaging" class="money-mask" type="text" inputmode="numeric"
+                     value="0,00" autocomplete="off" />
+            </div>
+          </label>
+
+          <label class="field">
+            <span>Frete</span>
+            <div class="input-prefix">
+              <span>R$</span>
+              <input id="shipping" class="money-mask" type="text" inputmode="numeric"
+                     value="0,00" autocomplete="off" />
+            </div>
+          </label>
+
+          <label class="field">
+            <span>Custo não planejado</span>
+            <div class="input-prefix">
+              <span>R$</span>
+              <input id="unexpectedCost" class="money-mask" type="text" inputmode="numeric"
+                     value="0,00" autocomplete="off" />
+            </div>
+          </label>
+
+          <label class="field">
+            <span>Lucro desejado sobre o custo</span>
+            <div class="input-suffix">
+              <input id="profitPercent" class="percent-mask" type="text" inputmode="numeric"
+                     value="30,00" autocomplete="off" />
+              <span>%</span>
+            </div>
+          </label>
+
+          <label class="field">
+            <span>Taxas de venda</span>
+            <div class="input-suffix">
+              <input id="salesFeePercent" class="percent-mask" type="text" inputmode="numeric"
+                     value="0,00" autocomplete="off" />
+              <span>%</span>
+            </div>
+          </label>
+
+          <label class="field">
+            <span>Impostos</span>
+            <div class="input-suffix">
+              <input id="taxPercent" class="percent-mask" type="text" inputmode="numeric"
+                     value="0,00" autocomplete="off" />
+              <span>%</span>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <div id="formError" class="error" role="alert" hidden></div>
+
+      <div class="actions">
+        <button type="submit" class="primary">Calcular preço</button>
+        <button type="reset" class="secondary">Limpar</button>
+      </div>
+    </form>
+
+    <section id="result" class="result-card" hidden aria-live="polite">
+      <div class="result-header">
+        <div>
+          <span class="eyebrow">RESULTADO</span>
+          <h2>Resumo da precificação</h2>
+        </div>
+        <div class="suggested-price">
+          <span>Preço sugerido</span>
+          <strong id="suggestedPrice">R$ 0,00</strong>
+        </div>
+      </div>
+
+      <div class="parts-summary summary-box">
+        <div class="parts-summary-header">
+          <h3>Partes da impressão</h3>
+          <strong id="rPartsTotal">0h 00min</strong>
+        </div>
+        <dl id="partsSummaryList"></dl>
+      </div>
+
+      <div class="result-grid">
+        <div class="summary-box">
+          <h3>Custos da peça</h3>
+          <dl>
+            <div><dt>Filamento</dt><dd id="rFilament">R$ 0,00</dd></div>
+            <div><dt>Manutenção</dt><dd id="rMaintenance">R$ 0,00</dd></div>
+            <div><dt>Depreciação</dt><dd id="rDepreciation">R$ 0,00</dd></div>
+            <div><dt>Energia</dt><dd id="rEnergy">R$ 0,00</dd></div>
+            <div><dt>Embalagem</dt><dd id="rPackaging">R$ 0,00</dd></div>
+            <div><dt>Frete</dt><dd id="rShipping">R$ 0,00</dd></div>
+            <div><dt>Custo não planejado</dt><dd id="rUnexpected">R$ 0,00</dd></div>
+            <div class="total"><dt>Custo total</dt><dd id="rTotalCost">R$ 0,00</dd></div>
+          </dl>
+        </div>
+
+        <div class="summary-box">
+          <h3>Formação do preço</h3>
+          <dl>
+            <div><dt>Lucro desejado</dt><dd id="rProfit">R$ 0,00</dd></div>
+            <div><dt>Taxas de venda</dt><dd id="rFees">R$ 0,00</dd></div>
+            <div><dt>Impostos</dt><dd id="rTaxes">R$ 0,00</dd></div>
+            <div><dt>Valor líquido após taxas</dt><dd id="rNet">R$ 0,00</dd></div>
+            <div class="total"><dt>Lucro líquido estimado</dt><dd id="rNetProfit">R$ 0,00</dd></div>
+          </dl>
+        </div>
+      </div>
+
+      <div class="details">
+        <div>
+          <span>Tempo total</span>
+          <strong id="rTime">0h 00min</strong>
+        </div>
+        <div>
+          <span>Filamento</span>
+          <strong id="rGrams">0 g</strong>
+        </div>
+        <div>
+          <span>Energia consumida</span>
+          <strong id="rKwh">0,000 kWh</strong>
+        </div>
+        <div>
+          <span>Custo da máquina/hora</span>
+          <strong id="rMachineHour">R$ 0,00</strong>
+        </div>
+      </div>
+
+      <p class="note">
+        O preço sugerido compensa taxas e impostos sobre a venda para preservar o percentual de lucro informado sobre o custo total.
+      </p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
