@@ -754,17 +754,6 @@ body.login-open {
     align-items: center;
   }
 
-  .actions {
-    position: sticky;
-    bottom: 8px;
-    z-index: 20;
-    padding: 8px;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.96);
-    backdrop-filter: blur(8px);
-  }
-
   .actions button {
     min-height: 50px;
   }
