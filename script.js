@@ -408,18 +408,25 @@ form.addEventListener("submit", (event) => {
 
   renderPartsSummary(parts, totalMinutes);
 
+  setText("rFilamentLabel", `Filamento (${money(filamentKgPrice)})`);
   setText("rFilament", money(filamentCost));
+  setText("rMaintenanceLabel", `Manutenção (${money(maintenancePerHour)}/h)`);
   setText("rMaintenance", money(maintenanceCost));
+  setText("rDepreciationLabel", `Depreciação (${money(depreciationPerHour)}/h)`);
   setText("rDepreciation", money(depreciationCost));
+  setText("rEnergyLabel", `Energia (${money(energyPerKwh)}/kWh)`);
   setText("rEnergy", money(energyCost));
   setText("rPackaging", money(packaging));
   setText("rShipping", money(shipping));
   setText("rUnexpected", money(unexpectedCost));
   setText("rTotalCost", money(totalCost));
 
-  setText("rProfit", `${money(desiredProfit)} (${profitPercent.toLocaleString("pt-BR")}% do custo)`);
-  setText("rFees", `${money(feesValue)} (${salesFeePercent.toLocaleString("pt-BR")}%)`);
-  setText("rTaxes", `${money(taxesValue)} (${taxPercent.toLocaleString("pt-BR")}%)`);
+  setText("rProfitLabel", `Lucro desejado (${profitPercent.toLocaleString("pt-BR")}% do custo)`);
+  setText("rProfit", money(desiredProfit));
+  setText("rFeesLabel", `Taxas de venda (${salesFeePercent.toLocaleString("pt-BR")}%)`);
+  setText("rFees", money(feesValue));
+  setText("rTaxesLabel", `Impostos (${taxPercent.toLocaleString("pt-BR")}%)`);
+  setText("rTaxes", money(taxesValue));
   setText("rNet", money(netRevenue));
   setText("rNetProfit", money(netProfit));
 
